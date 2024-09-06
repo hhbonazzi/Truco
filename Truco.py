@@ -42,22 +42,46 @@ class Game:
             card_index = player1_hand.index(play)
             print("Nice!")
             player1_hand.pop(card_index)
-            
+            player1_hand.append(" ")  
         if self.id == 2:
             play = input(("WHICH ONE OF YOUR CARDS WOULD YOU LIKE TO PLAY, " + self.name + "?\n\n" 
                             + str(player2_hand[0]) + "\n" 
                             + str(player2_hand[1]) + "\n"  
                             + str(player2_hand[2]) + "\n\n"))
-            while play.lower() not in player2_hand:
+            while play not in player2_hand:
                 play = input("WHICH ONE OF YOUR CARDS WOULD YOU LIKE TO PLAY?\n\n")
             card_index = player2_hand.index(play)
             print("Nice!")
             player2_hand.pop(card_index)
-            
-            
-          
-    def calling_truco(self):
-        pass
+            player2_hand.append(" ")
+
+    def hide_card(self, name):
+        self.name = name
+        if self.id == 1:
+            hide = input("WHICH ONE OF YOUR CARDS WOULD YOU LIKE TO HIDE, " + self.name + "?\n\n" 
+                                + str(player1_hand[0]) + "\n" 
+                                + str(player1_hand[1]) + "\n"  
+                                + str(player1_hand[2]) + "\n\n")
+            while hide not in player1_hand:
+                hide = input("WHICH ONE OF YOUR CARDS WOULD YOU LIKE TO HIDE?\n\n")
+            card_index = player1_hand.index(hide)
+            print("Nice!")
+            player1_hand.pop(card_index)
+            player1_hand.append(" ")    
+        if self.id == 2:
+            hide = input(("WHICH ONE OF YOUR CARDS WOULD YOU LIKE TO HIDE, " + self.name + "?\n\n" 
+                            + str(player2_hand[0]) + "\n" 
+                            + str(player2_hand[1]) + "\n"  
+                            + str(player2_hand[2]) + "\n\n"))
+            while hide not in player2_hand:
+                hide = input("WHICH ONE OF YOUR CARDS WOULD YOU LIKE TO HIDE?\n\n")
+            card_index = player2_hand.index(hide)
+            print("Nice!")
+            player2_hand.pop(card_index)
+            player2_hand.append(" ")
+
+    def calling_truco(self, name):
+        self.name = name
 
 #Game
 score_list = [0,0]
@@ -107,6 +131,8 @@ while GameOn:
                     choice = input("WHAT WOULD YOU LIKE TO DO?\n\n")
                 if choice.title() == "Play Card":
                     player1.play_card(name1)
+                elif choice.title() == "Hide Card":
+                    player1.hide_card(name1)
                 score_list2[0] += 1
                 print("SCORES:\n" + player_list[0] + ": " +  str(score_list2[0]) 
                 + "\n" + player_list[1] + ": " +  str(score_list2[1]))
@@ -127,6 +153,8 @@ while GameOn:
                     choice2 = input("WHAT WOULD YOU LIKE TO DO?\n\n")
                 if choice2.title() == "Play Card":
                     player2.play_card(name2)
+                elif choice2.title() == "Hide Card":
+                    player2.hide_card(name2)
                 score_list2[1] += 1
                 print("SCORES:\n" + player_list[0] + ": " +  str(score_list2[0]) #Maybe turn into function later
                 + "\n" + player_list[1] + ": " +  str(score_list2[1]))
@@ -148,6 +176,8 @@ while GameOn:
                     choice = input("WHAT WOULD YOU LIKE TO DO?\n\n")
                 if choice.title() == "Play Card":
                     player1.play_card(name1)
+                elif choice.title() == "Hide Card":
+                    player1.hide_card(name1)
                 score_list2[0] += 1
                 print("SCORES:\n" + player_list[0] + ": " +  str(score_list2[0]) #Maybe turn into function later
                 + "\n" + player_list[1] + ": " +  str(score_list2[1]))
@@ -168,6 +198,8 @@ while GameOn:
                     choice2 = input("WHAT WOULD YOU LIKE TO DO?\n\n")
                 if choice2.title() == "Play Card":
                     player2.play_card(name2)
+                elif choice.title() == "Hide Card":
+                    player2.hide_card(name2)
                 score_list2[1] += 1
                 print("SCORES:\n" + player_list[0] + ": " +  str(score_list2[0]) #Maybe turn into function later
                 + "\n" + player_list[1] + ": " +  str(score_list2[1]))
