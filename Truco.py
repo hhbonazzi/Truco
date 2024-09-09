@@ -1,13 +1,21 @@
 import random
 
 #Card organization
-cards = {70 : ["A", "A", "A", "A"], 60 : ["2", "2", "2", "2"], 50 : ["3", "3", "3", "3"],
+cards = { 70: ["3", "3", "3", "3"], 60 : ["2", "2", "2", "2"], 50 : ["A", "A", "A", "A"],
          40 : ["K", "K", "K", "K"], 30 : ["J", "J", "J", "J"], 
         20 : [ "Q",  "Q",  "Q", "Q"], 10 : ["7", "7", "7", "7"]}
 shuffler = []
 for lst in cards.values():
     for card in lst:
         shuffler.append(card)
+
+#Game
+score_list = [0,0]
+player_list = []
+GameOn = True
+RoundOn = True
+round_number = 1
+choices = []
 
 #Players Hand
 player1_hand = [shuffler[0], shuffler[1], shuffler[2]]
@@ -39,8 +47,8 @@ class Game:
                                 + str(player1_hand[2]) + "\n\n")
             while play not in player1_hand:
                 play = input("WHICH ONE OF YOUR CARDS WOULD YOU LIKE TO PLAY?\n\n")
+            choices.append(play)
             card_index = player1_hand.index(play)
-            print("Nice!")
             player1_hand.pop(card_index)
             player1_hand.append(" ")  
         if self.id == 2:
@@ -50,8 +58,8 @@ class Game:
                             + str(player2_hand[2]) + "\n\n"))
             while play not in player2_hand:
                 play = input("WHICH ONE OF YOUR CARDS WOULD YOU LIKE TO PLAY?\n\n")
+            choices.append(play)
             card_index = player2_hand.index(play)
-            print("Nice!")
             player2_hand.pop(card_index)
             player2_hand.append(" ")
 
@@ -64,8 +72,8 @@ class Game:
                                 + str(player1_hand[2]) + "\n\n")
             while hide not in player1_hand:
                 hide = input("WHICH ONE OF YOUR CARDS WOULD YOU LIKE TO HIDE?\n\n")
+            choices.append(hide)
             card_index = player1_hand.index(hide)
-            print("Nice!")
             player1_hand.pop(card_index)
             player1_hand.append(" ")    
         if self.id == 2:
@@ -75,21 +83,15 @@ class Game:
                             + str(player2_hand[2]) + "\n\n"))
             while hide not in player2_hand:
                 hide = input("WHICH ONE OF YOUR CARDS WOULD YOU LIKE TO HIDE?\n\n")
-            card_index = player2_hand.index(hide)
-            print("Nice!")
+            choices.append(hide)
+            card_index = player2_hand.index(hide)            
             player2_hand.pop(card_index)
             player2_hand.append(" ")
 
     def calling_truco(self, name):
         self.name = name
-
-#Game
-score_list = [0,0]
-player_list = []
-GameOn = True
-RoundOn = True
-round_number = 1
-
+        if self.id == 1:
+            pass
 
 name1 = input('''
 Welcome to a thrilling 2-player Truco duel! 
@@ -107,20 +109,49 @@ player1 = Game(name1)
 player2 = Game(name2)
 
 while GameOn:
+    #Game setup
     RoundOn = True
     random.shuffle(shuffler)
     score_list2 = [0,0]
-    round_number2 = 0
+    round_number2 = 1
     player1_hand = [shuffler[0], shuffler[1], shuffler[2]]
     player2_hand = [shuffler[3], shuffler[4], shuffler[5]]
     print("ROUND: " + str(round_number))
     print("\nPOINTS:\n" + player_list[0] + ": " +  str(score_list[0])
               + "\n" + player_list[1] + ": " +  str(score_list[1]))
     while RoundOn:
-        round_number2 += 1
-        print("\nROUND OF ROUND:", round_number2)
-        if round_number%2:
+        if round_number%2: 
+            #Score System
+            if len(choices) >= 2:
+                lst_choice = [key for key, value in cards.items() if choices[0] in value]
+                lst_choice2 = [key for key, value in cards.items() if choices[1] in value]
+                if lst_choice[0] > lst_choice2[0]:
+                    score_list2[0] += 1
+                elif lst_choice[0] < lst_choice2[0]:
+                     score_list2[1] += 1
+                else:
+                    score_list2[0] += 1
+                    score_list2[1] += 1    
+                choices.pop()
+                choices.pop()
+            print("SCORES:\n" + player_list[0] + ": " +  str(score_list2[0]) #Maybe turn into function later
+                + "\n" + player_list[1] + ": " +  str(score_list2[1]))
+            #Playing System
             if round_number2 % 2 == 1:
+                #Winning Point System
+                if score_list2[0] >= 2:
+                    round_number += 1
+                    score_list[0] += 1
+                    print(player_list[0], "WINS POINT!\n")
+                    RoundOn = False
+                    break
+                elif score_list2[1] >= 2:
+                    round_number += 1  
+                    score_list[1] += 1
+                    print(player_list[1], "WINS POINT!\n")
+                    RoundOn = False
+                    break  
+                #Playing
                 print("\n" + player_list[0], "GETS TO PLAY")
                 choice = input("YOUR HAND IS:\n\n" 
                                 + str(player1_hand[0]) + "\n" 
@@ -133,16 +164,23 @@ while GameOn:
                     player1.play_card(name1)
                 elif choice.title() == "Hide Card":
                     player1.hide_card(name1)
-                score_list2[0] += 1
-                print("SCORES:\n" + player_list[0] + ": " +  str(score_list2[0]) 
-                + "\n" + player_list[1] + ": " +  str(score_list2[1]))
+                #Next round system
+                round_number2 += 1
+            else:
+                #Winning Point System
                 if score_list2[0] >= 2:
                     round_number += 1
                     score_list[0] += 1
                     print(player_list[0], "WINS POINT!\n")
                     RoundOn = False
-                    break 
-            else:
+                    break
+                elif score_list2[1] >= 2:
+                    round_number += 1  
+                    score_list[1] += 1
+                    print(player_list[1], "WINS POINT!\n")
+                    RoundOn = False
+                    break  
+                #Playing  
                 print("\n" + player_list[1], "GETS TO PLAY")
                 choice2 = input("YOUR HAND IS:\n\n" 
                                 + str(player2_hand[0]) + "\n" 
@@ -155,17 +193,39 @@ while GameOn:
                     player2.play_card(name2)
                 elif choice2.title() == "Hide Card":
                     player2.hide_card(name2)
-                score_list2[1] += 1
-                print("SCORES:\n" + player_list[0] + ": " +  str(score_list2[0]) #Maybe turn into function later
-                + "\n" + player_list[1] + ": " +  str(score_list2[1]))
-                if score_list2[1] >= 2:
+                #Next round system 
+                round_number2 += 1  
+        else:
+            #Score System
+            if len(choices) >= 2:
+                lst_choice = [key for key, value in cards.items() if choices[1] in value]
+                lst_choice2 = [key for key, value in cards.items() if choices[0] in value]
+                if lst_choice[0] > lst_choice2[0]:
+                    score_list2[0] += 1
+                elif lst_choice[0] < lst_choice2[0]:
+                     score_list2[1] += 1
+                else:
+                    score_list2[0] += 1
+                    score_list2[1] += 1    
+                choices.pop()
+                choices.pop()
+            print("SCORES:\n" + player_list[0] + ": " +  str(score_list2[0]) #Maybe turn into function later
+                + "\n" + player_list[1] + ": " +  str(score_list2[1])) 
+            if round_number2 % 2 == 0:
+                #Winning Point System
+                if score_list2[0] >= 2:
                     round_number += 1
+                    score_list[0] += 1
+                    print(player_list[0], "WINS POINT!\n")
+                    RoundOn = False
+                    break
+                elif score_list2[1] >= 2:
+                    round_number += 1  
                     score_list[1] += 1
                     print(player_list[1], "WINS POINT!\n")
                     RoundOn = False
-                    break
-        else:
-            if round_number2 % 2 == 0:
+                    break  
+                #Playing
                 print("\n" + player_list[0], "GETS TO PLAY")
                 choice = input("YOUR HAND IS:\n\n" 
                                 + str(player1_hand[0]) + "\n" 
@@ -178,16 +238,23 @@ while GameOn:
                     player1.play_card(name1)
                 elif choice.title() == "Hide Card":
                     player1.hide_card(name1)
-                score_list2[0] += 1
-                print("SCORES:\n" + player_list[0] + ": " +  str(score_list2[0]) #Maybe turn into function later
-                + "\n" + player_list[1] + ": " +  str(score_list2[1]))
+                #Next round system
+                round_number2 += 1
+            else:
+                #Winning Point System
                 if score_list2[0] >= 2:
                     round_number += 1
                     score_list[0] += 1
                     print(player_list[0], "WINS POINT!\n")
                     RoundOn = False
-                    break 
-            else:
+                    break
+                elif score_list2[1] >= 2:
+                    round_number += 1  
+                    score_list[1] += 1
+                    print(player_list[1], "WINS POINT!\n")
+                    RoundOn = False
+                    break  
+                #Playing  
                 print("\n" + player_list[1], "GETS TO PLAY")
                 choice2 = input("YOUR HAND IS:\n\n" 
                                 + str(player2_hand[0]) + "\n" 
@@ -198,17 +265,10 @@ while GameOn:
                     choice2 = input("WHAT WOULD YOU LIKE TO DO?\n\n")
                 if choice2.title() == "Play Card":
                     player2.play_card(name2)
-                elif choice.title() == "Hide Card":
+                elif choice2.title() == "Hide Card":
                     player2.hide_card(name2)
-                score_list2[1] += 1
-                print("SCORES:\n" + player_list[0] + ": " +  str(score_list2[0]) #Maybe turn into function later
-                + "\n" + player_list[1] + ": " +  str(score_list2[1]))
-                if score_list2[1] >= 2:
-                    round_number += 1
-                    score_list[1] += 1
-                    print(player_list[1], "WINS POINT!\n")
-                    RoundOn = False
-                    break
+                #Next round system 
+                round_number2 += 1  
     if score_list[0] >= 12:
         print(player_list[0], "WINS GAME!\n")
         GameOn = False
