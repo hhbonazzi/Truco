@@ -62,7 +62,6 @@ class Game:
             player2_hand.pop(card_index)
             player2_hand.append(" ")
         
-
     def hide_card(self, name):
         self.name = name
         if self.id == 1:
@@ -150,6 +149,7 @@ Brazilian card game
 and outwit your opponent to claim victory. \n\n What is your name Player 1?\n\n
              ''')
 player_list.append(name1)
+
 name2 = input("What about yours Player 2? \n\n")
 player_list.append(name2)
 
@@ -175,8 +175,6 @@ while GameOn:
         cards[80] = cards[key_bcard]
     print("THE HIGHEST CARD OF THIS ROUND IS :\n", cards[80][0])
     cards[0] = {} 
-    print(shuffler)
-    print(cards)
     #Giving out cards
     player1_hand = [shuffler[0], shuffler[1], shuffler[2]]
     player2_hand = [shuffler[3], shuffler[4], shuffler[5]]
@@ -188,8 +186,6 @@ while GameOn:
                 lst_choice2 = [key for key, value in cards.items() if choices_player2[0] in value]
                 lst_choice.reverse()
                 lst_choice2.reverse()
-                print(lst_choice)
-                print(lst_choice2)
                 if lst_choice[0] > lst_choice2[0]:
                     score_list2[0] += 1
                 elif lst_choice[0] < lst_choice2[0]:
@@ -308,8 +304,6 @@ while GameOn:
                 lst_choice2 = [key for key, value in cards.items() if choices_player2[0] in value]
                 lst_choice.reverse()
                 lst_choice2.reverse()
-                print(lst_choice)
-                print(lst_choice2)
                 if lst_choice[0] > lst_choice2[0]:
                     score_list2[0] += 1
                 elif lst_choice[0] < lst_choice2[0]:
@@ -431,5 +425,3 @@ while GameOn:
 
 player1 = Game(name1)
 player2 = Game(name2)
-
-#CHANGE "HIDE" (REMOVE AFTER USING)
